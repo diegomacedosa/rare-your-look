@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "npm install --prefix rare-your-look",
+  "buildCommand": "npm run build --prefix rare-your-look",
+  "outputDirectory": "rare-your-look/dist"
+}
