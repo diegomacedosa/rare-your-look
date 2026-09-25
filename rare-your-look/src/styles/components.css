@@ -1,0 +1,447 @@
+/* ==========================================================================
+   Componentes compartilhados entre cenas
+   (cards de produto, timer, regras, distintivos, coleção, ranking)
+   ========================================================================== */
+
+/* ---------- Amostras de cor ---------- */
+.swatch-dot {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--sw, var(--color-rose-mauve));
+  box-shadow: inset 0 0 0 1px rgba(26, 26, 26, 0.12), 0 1px 2px rgba(138, 90, 98, 0.2);
+  vertical-align: middle;
+}
+
+.chip--swatch::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--sw);
+  box-shadow: inset 0 0 0 1px rgba(26, 26, 26, 0.15);
+}
+
+/* ---------- Grade de produtos ---------- */
+.product-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(min(190px, 100%), 1fr));
+}
+
+.product-card {
+  display: grid;
+  grid-template-columns: 44px 1fr 20px;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 84px;
+  padding: var(--space-3);
+  text-align: left;
+  border-radius: var(--radius-md);
+  background: var(--color-warm-white);
+  border: 1.5px solid var(--color-line);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--dur-fast) var(--ease-soft),
+    border-color var(--dur-fast) var(--ease-soft),
+    box-shadow var(--dur-fast) var(--ease-soft);
+}
+.product-card:hover:not([data-locked]) {
+  transform: translateY(-2px);
+  border-color: var(--color-rose-mauve);
+}
+.product-card[aria-pressed='true'] {
+  border-color: var(--color-deep-mauve);
+  background: var(--color-soft-blush);
+  box-shadow: 0 0 0 2px var(--color-deep-mauve) inset;
+}
+.product-card[data-locked] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.product-card--hint {
+  border-color: var(--color-warning);
+  border-radius: var(--radius-md);
+}
+
+.product-card__art svg {
+  width: 44px;
+  height: auto;
+}
+.product-card__info {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.product-card__shade {
+  font-size: var(--text-base);
+  line-height: 1.15;
+}
+.product-card__line {
+  font-size: var(--text-xs);
+  color: var(--color-muted-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.product-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+.product-card__state {
+  display: grid;
+  place-items: center;
+  color: var(--color-deep-mauve);
+}
+.product-card__state svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---------- Lista de regras ---------- */
+.rule-list {
+  display: grid;
+  gap: var(--space-2);
+}
+.rule-item {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: rgba(250, 247, 245, 0.8);
+  border: 1.5px solid var(--color-line);
+  transition: background-color var(--dur-base) var(--ease-soft), border-color var(--dur-base) var(--ease-soft);
+}
+.rule-item[data-met='true'] {
+  background: rgba(123, 174, 138, 0.14);
+  border-color: rgba(123, 174, 138, 0.5);
+}
+.rule-item__mark {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--color-line-strong);
+  color: transparent;
+}
+.rule-item[data-met='true'] .rule-item__mark {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: var(--color-ink);
+}
+.rule-item__mark svg {
+  width: 14px;
+  height: 14px;
+}
+.rule-item__text {
+  font-size: var(--text-sm);
+  line-height: 1.35;
+}
+.rule-item__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.rule-item--surprise {
+  border-color: var(--color-warning);
+  background: rgba(232, 184, 90, 0.16);
+}
+
+/* ---------- Timer ---------- */
+.timer {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+}
+.timer svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+  width: 64px;
+  height: 64px;
+}
+.timer__track {
+  fill: none;
+  stroke: rgba(138, 90, 98, 0.16);
+  stroke-width: 6;
+}
+.timer__fill {
+  fill: none;
+  stroke: var(--color-deep-mauve);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 220ms linear, stroke var(--dur-base) var(--ease-soft);
+}
+.timer__value {
+  position: relative;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+}
+.timer--warning .timer__fill {
+  stroke: var(--color-warning);
+}
+.timer--critical .timer__fill {
+  stroke: var(--color-error);
+}
+.timer--critical .timer__value {
+  color: var(--color-error-ink);
+  animation: rb-pulse 1s infinite;
+}
+
+/* ---------- Barra de pontuação ---------- */
+.score-bar {
+  display: grid;
+  gap: var(--space-2);
+}
+.score-bar__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.score-bar__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.score-bar__value {
+  font-variant-numeric: tabular-nums;
+}
+.score-bar__value strong {
+  font-size: var(--text-lg);
+  color: var(--color-deep-mauve);
+}
+
+/* ---------- Distintivos ---------- */
+.badge-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
+}
+.badge-card {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-warm-white);
+  border: 1.5px solid var(--color-line);
+}
+.badge-card[data-unlocked='true'] {
+  background: linear-gradient(160deg, var(--color-soft-blush), var(--color-warm-white));
+  border-color: var(--color-rose-mauve);
+}
+.badge-card__medal {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(138, 90, 98, 0.1);
+  color: var(--color-deep-mauve);
+}
+.badge-card[data-unlocked='false'] .badge-card__medal {
+  color: var(--color-muted-strong);
+}
+.badge-card__icon {
+  width: 26px;
+  height: 26px;
+}
+.badge-card__icon svg {
+  width: 100%;
+  height: 100%;
+}
+.badge-card__body {
+  display: grid;
+  gap: 6px;
+}
+.badge-card__name {
+  font-size: var(--text-base);
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+.badge-card__date {
+  color: var(--color-deep-mauve);
+}
+
+/* ---------- Itens da coleção ---------- */
+.item-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
+}
+.item-card {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-warm-white);
+  border: 1.5px solid var(--color-line);
+  text-align: center;
+}
+.item-card[data-unlocked='false'] {
+  background: rgba(250, 247, 245, 0.55);
+  color: var(--color-muted-strong);
+}
+.item-card__art {
+  display: grid;
+  place-items: center;
+  height: 92px;
+  border-radius: var(--radius-sm);
+  background: rgba(240, 213, 216, 0.5);
+}
+.item-card[data-unlocked='false'] .item-card__art {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+.item-card__name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+/* ---------- Estatísticas e ranking ---------- */
+.stat-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+}
+.stat {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-soft-blush);
+  display: grid;
+  gap: 2px;
+}
+.stat__value {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: 1;
+  color: var(--color-deep-mauve);
+}
+.stat__label {
+  font-size: var(--text-xs);
+  color: var(--color-muted-strong);
+  font-weight: 500;
+}
+
+.leaderboard {
+  display: grid;
+  gap: var(--space-1);
+}
+.leaderboard__row {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+}
+.leaderboard__row[data-me='true'] {
+  background: var(--color-deep-mauve);
+  color: var(--color-warm-white);
+  font-weight: 600;
+}
+.leaderboard__pos {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--color-deep-mauve);
+}
+.leaderboard__row[data-me='true'] .leaderboard__pos {
+  color: var(--color-warm-white);
+}
+.leaderboard__score {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Estado vazio ---------- */
+.empty-state {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: center;
+  padding: var(--space-12) var(--space-6);
+  text-align: center;
+  color: var(--color-muted-strong);
+}
+
+/* ---------- Grades de opção (avatar) ---------- */
+.option-grid {
+  display: grid;
+  gap: var(--space-2);
+  grid-template-columns: repeat(auto-fill, minmax(min(112px, 100%), 1fr));
+}
+.option-tile {
+  position: relative;
+  min-height: var(--touch-min);
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-line);
+  background: var(--color-warm-white);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: border-color var(--dur-fast) var(--ease-soft), background-color var(--dur-fast) var(--ease-soft);
+}
+.option-tile[aria-pressed='true'] {
+  border-color: var(--color-deep-mauve);
+  background: var(--color-soft-blush);
+  box-shadow: inset 0 0 0 1.5px var(--color-deep-mauve);
+}
+.option-tile[disabled] {
+  opacity: 0.5;
+}
+.option-tile__lock {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  color: var(--color-muted-strong);
+}
+.option-tile__lock svg {
+  width: 100%;
+  height: 100%;
+}
+
+.swatch-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.swatch-btn {
+  position: relative;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border-radius: 50%;
+  border: 2px solid transparent;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), 0 1px 4px rgba(138, 90, 98, 0.24);
+  background: var(--sw);
+}
+.swatch-btn[aria-pressed='true'] {
+  border-color: var(--color-deep-mauve);
+  transform: scale(1.06);
+}
+.swatch-btn[disabled] {
+  opacity: 0.45;
+}
+.swatch-btn__lock {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--color-warm-white);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+.swatch-btn__lock svg {
+  width: 16px;
+  height: 16px;
+}

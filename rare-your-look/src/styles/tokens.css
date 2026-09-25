@@ -1,0 +1,78 @@
+/* ==========================================================================
+   Design tokens — Rare Beauty: Rare Your Look (SPEC §6)
+   ========================================================================== */
+:root {
+  /* Base Rare Beauty (SPEC §6.1) */
+  --color-nude-beige: #F5EDE4;   /* fundo principal */
+  --color-rose-mauve: #C4929A;   /* accent primário */
+  --color-deep-mauve: #8A5A62;   /* accent secundário / hover */
+  --color-soft-blush: #F0D5D8;   /* superfícies cards */
+  --color-warm-white: #FAF7F5;   /* texto sobre fundo escuro */
+  --color-ink: #1A1A1A;          /* texto principal */
+  --color-muted: #6B6B6B;        /* texto secundário */
+  --color-success: #7BAE8A;      /* regra cumprida */
+  --color-warning: #E8B85A;      /* timer warning */
+  --color-error: #D95B5B;        /* regra não cumprida */
+
+  /* Derivados para garantir contraste WCAG AA (SPEC §10) */
+  --color-deep-mauve-dark: #6E454C;  /* hover/pressed do botão primário */
+  --color-muted-strong: #5A5A5A;     /* texto secundário sobre soft-blush (4.7:1) */
+  --color-success-ink: #3F6E4C;      /* texto "cumprida" sobre fundos claros */
+  --color-error-ink: #A33B3B;        /* texto "não cumprida" sobre fundos claros */
+  --color-warning-ink: #7A5A12;
+  --color-surface: var(--color-warm-white);
+  --color-line: rgba(138, 90, 98, 0.18);
+  --color-line-strong: rgba(138, 90, 98, 0.35);
+  --color-focus: #8A5A62;
+
+  /* Tipografia (SPEC §6.2) */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.75rem;
+
+  /* Espaçamento e bordas (SPEC §6.3) */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Profundidade — sombras quentes, nunca cinza puro */
+  --shadow-sm: 0 1px 2px rgba(138, 90, 98, 0.08), 0 2px 8px rgba(138, 90, 98, 0.06);
+  --shadow-md: 0 4px 18px rgba(138, 90, 98, 0.14);
+  --shadow-lg: 0 14px 44px rgba(138, 90, 98, 0.2);
+
+  /* Movimento */
+  --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 450ms;
+
+  /* Layout */
+  --header-h: 64px;
+  --touch-min: 44px;   /* alvo de toque mínimo (SPEC §10) */
+  --content-max: 1200px;
+  --gutter: clamp(16px, 4vw, 32px);
+
+  /* Camadas */
+  --z-header: 10;
+  --z-overlay: 50;
+  --z-modal: 100;
+  --z-toast: 120;
+}

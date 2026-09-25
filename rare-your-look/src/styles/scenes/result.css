@@ -1,0 +1,116 @@
+.result {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.result__stage {
+  position: sticky;
+  top: calc(var(--header-h) + var(--space-4));
+  min-height: 480px;
+  padding: var(--space-6);
+}
+
+.result__panel {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.result__score {
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+  text-align: center;
+  padding: var(--space-6);
+}
+
+.result__score-value {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 2rem + 5vw, 4.5rem);
+  line-height: 1;
+  color: var(--color-deep-mauve);
+  font-variant-numeric: tabular-nums;
+}
+
+.result__score-label {
+  font-size: var(--text-sm);
+  color: var(--color-muted-strong);
+}
+
+.result__subtitle {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-deep-mauve);
+}
+
+.result__breakdown {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.result__line {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: rgba(250, 247, 245, 0.85);
+  font-size: var(--text-sm);
+}
+.result__line[data-met='true'] {
+  background: rgba(123, 174, 138, 0.16);
+}
+.result__line-mark {
+  display: grid;
+  place-items: center;
+  color: var(--color-error-ink);
+}
+.result__line[data-met='true'] .result__line-mark {
+  color: var(--color-success-ink);
+}
+.result__line-mark .btn__icon {
+  width: 16px;
+  height: 16px;
+}
+.result__line-points {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-deep-mauve);
+}
+
+.result__extras {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.result__rules .rule-list {
+  margin-top: var(--space-2);
+}
+
+.result__actions {
+  margin-top: var(--space-2);
+}
+
+@media (max-width: 900px) {
+  .result {
+    grid-template-columns: 1fr;
+  }
+  .result__stage {
+    position: static;
+    min-height: 300px;
+    padding: var(--space-4);
+  }
+  .result__stage canvas {
+    max-width: 210px;
+  }
+  .result__actions .btn {
+    flex: 1 1 calc(50% - var(--space-3));
+  }
+}

@@ -1,0 +1,29 @@
+.collection__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.collection__sort {
+  display: grid;
+  gap: 4px;
+}
+
+.collection__sort .input {
+  min-width: 220px;
+}
+
+.collection__badges {
+  margin-top: var(--space-12);
+  display: grid;
+  gap: var(--space-4);
+}
+
+.item-card .btn__icon {
+  width: 14px;
+  height: 14px;
+  vertical-align: -2px;
+}

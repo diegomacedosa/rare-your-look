@@ -1,0 +1,103 @@
+/* Estúdio — gameplay principal */
+
+.studio {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.8fr) 1.2fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.studio__stage {
+  position: sticky;
+  top: calc(var(--header-h) + var(--space-4));
+  min-height: 480px;
+  padding: var(--space-6);
+}
+
+.studio__hud {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.studio__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.studio__title {
+  font-size: var(--text-2xl);
+  line-height: 1.05;
+}
+
+.studio__head-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.studio__rules .rule-list {
+  max-height: 210px;
+  overflow-y: auto;
+}
+
+.studio__score {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: rgba(250, 247, 245, 0.9);
+  border: 1px solid var(--color-line);
+}
+
+.studio__products {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.studio__products .product-grid {
+  max-height: 40dvh;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.studio__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+@media (max-width: 960px) {
+  .studio {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  .studio__stage {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 2;
+    min-height: 0;
+    padding: var(--space-3);
+  }
+  .studio__stage canvas {
+    max-width: 190px;
+  }
+  .studio__rules .rule-list,
+  .studio__products .product-grid {
+    max-height: none;
+  }
+  .studio__actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+    padding: var(--space-3) 0;
+    background: linear-gradient(to top, var(--color-nude-beige) 70%, transparent);
+  }
+  .studio__actions .btn:first-child {
+    flex: 1 1 100%;
+  }
+  .studio__actions .btn:not(:first-child) {
+    flex: 1;
+  }
+}

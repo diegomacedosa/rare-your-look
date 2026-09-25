@@ -1,0 +1,74 @@
+/* Keyframes globais */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes logo-in {
+  0% { opacity: 0; letter-spacing: 0.2em; filter: blur(8px); }
+  100% { opacity: 1; letter-spacing: -0.01em; filter: blur(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(196, 146, 154, 0.55); }
+  100% { box-shadow: 0 0 0 16px rgba(196, 146, 154, 0); }
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes timer-warn {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.anim-fade-in { animation: fade-in var(--dur-slow) var(--ease-out) both; }
+.anim-rise-in { animation: rise-in 600ms var(--ease-out) both; }
+.anim-float { animation: float 5s ease-in-out infinite; }
+.anim-pop { animation: pop 420ms var(--ease-out) both; }
+.anim-shake { animation: shake 280ms ease-in-out; }
+.anim-pulse { animation: pulse-ring 1.6s ease-out infinite; }
+
+.shimmer-text {
+  background: linear-gradient(90deg, var(--color-deep-mauve), var(--color-rose-mauve), #E8C4A0, var(--color-deep-mauve));
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-float,
+  .anim-pulse,
+  .shimmer-text { animation: none; }
+  .shimmer-text { color: var(--color-deep-mauve); background: none; }
+}

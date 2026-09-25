@@ -1,0 +1,152 @@
+.tutorial {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.75fr) 2fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.tutorial__list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.tutor-card {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  text-align: left;
+  border-radius: var(--radius-md);
+  background: var(--color-warm-white);
+  border: 1.5px solid var(--color-line);
+  transition: border-color var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-soft);
+}
+.tutor-card:hover {
+  transform: translateY(-2px);
+}
+.tutor-card[aria-pressed='true'] {
+  border-color: var(--color-deep-mauve);
+  background: var(--color-soft-blush);
+}
+
+.tutor-card__face {
+  width: 84px;
+  height: 92px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+.tutor-card__face canvas {
+  width: 84px;
+  max-width: none;
+  margin-top: 6px;
+  filter: none;
+}
+
+.tutor-card__info {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.tutor-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 2px 0;
+}
+
+.tutorial__detail {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) 1.2fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.tutorial__stage {
+  min-height: 420px;
+  padding: var(--space-4);
+  position: sticky;
+  top: calc(var(--header-h) + var(--space-4));
+}
+
+.tutorial__body {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.tutorial__steps {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-2) 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.tutorial__step {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: rgba(250, 247, 245, 0.8);
+  border: 1.5px solid transparent;
+  font-size: var(--text-sm);
+  transition: border-color var(--dur-base) var(--ease-soft), background-color var(--dur-base) var(--ease-soft);
+}
+.tutorial__step[aria-current='true'] {
+  border-color: var(--color-deep-mauve);
+  background: var(--color-soft-blush);
+}
+
+.tutorial__step-num {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-deep-mauve);
+  color: var(--color-warm-white);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.tutorial__products-title {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-deep-mauve);
+  margin-top: var(--space-2);
+}
+
+.tutorial__products {
+  display: grid;
+  gap: var(--space-2);
+}
+.tutorial__product {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 1080px) {
+  .tutorial,
+  .tutorial__detail {
+    grid-template-columns: 1fr;
+  }
+  .tutorial__stage {
+    position: static;
+    min-height: 300px;
+  }
+  .tutorial__stage canvas {
+    max-width: 200px;
+  }
+  .tutorial__list {
+    grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
+  }
+}

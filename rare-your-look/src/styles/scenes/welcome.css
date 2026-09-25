@@ -1,0 +1,68 @@
+.welcome {
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  min-height: calc(100dvh - var(--header-h) - var(--space-12));
+}
+
+.welcome__hero {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+}
+
+.welcome__title {
+  font-size: clamp(2.5rem, 1.5rem + 5vw, 4.5rem);
+  line-height: 0.98;
+}
+
+.welcome__slogan {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-xl);
+  color: var(--color-deep-mauve);
+}
+
+.welcome__pending {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4);
+}
+
+.welcome__menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.welcome__hint {
+  margin-top: var(--space-2);
+}
+
+.welcome__stage {
+  align-self: stretch;
+  min-height: 420px;
+}
+
+@media (max-width: 860px) {
+  .welcome {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  .welcome__stage {
+    order: -1;
+    min-height: 320px;
+  }
+  .welcome__stage canvas {
+    max-width: 240px;
+  }
+  .welcome__menu .btn {
+    flex: 1 1 calc(50% - var(--space-3));
+  }
+}

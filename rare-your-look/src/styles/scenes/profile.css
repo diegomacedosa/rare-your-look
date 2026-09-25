@@ -1,0 +1,58 @@
+.profile {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) 1.2fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.profile__card {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.profile__stage {
+  min-height: 320px;
+  padding: var(--space-4);
+}
+.profile__stage canvas {
+  max-width: 220px;
+}
+
+.profile__stats {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.profile__ranking {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-warm-white);
+  border: 1px solid var(--color-line);
+}
+.profile__ranking:focus {
+  outline: none;
+}
+
+.profile__badges {
+  margin-top: var(--space-8);
+  display: grid;
+  gap: var(--space-4);
+}
+
+.profile__danger {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: space-between;
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-line);
+}
+
+@media (max-width: 900px) {
+  .profile {
+    grid-template-columns: 1fr;
+  }
+}

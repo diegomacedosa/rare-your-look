@@ -1,0 +1,66 @@
+/* Design tokens — Rare Beauty: Rare Your Look (SPEC §6) */
+:root {
+  /* Base Rare Beauty */
+  --color-nude-beige: #F5EDE4;  /* fundo principal */
+  --color-rose-mauve: #C4929A;  /* accent primário (decorativo) */
+  --color-deep-mauve: #8A5A62;  /* accent secundário / hover / botões */
+  --color-soft-blush: #F0D5D8;  /* superfícies cards */
+  --color-warm-white: #FAF7F5;  /* texto sobre fundo escuro */
+  --color-ink: #1A1A1A;         /* texto principal */
+  --color-muted: #6B6B6B;       /* texto secundário */
+  --color-success: #7BAE8A;     /* regra cumprida */
+  --color-warning: #E8B85A;     /* timer warning */
+  --color-error: #D95B5B;       /* regra não cumprida */
+
+  /* Derivados (mantêm contraste WCAG AA) */
+  --color-deeper-mauve: #6F434B;
+  --color-success-ink: #3F7050;
+  --color-error-ink: #A23A3A;
+  --color-warning-ink: #8A6415;
+  --color-surface: #FFFDFB;
+  --color-line: #E6D6CF;
+  --color-overlay: rgba(26, 26, 26, 0.45);
+
+  /* Tipografia */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.75rem;
+
+  /* Espaçamento e bordas */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Elevação */
+  --shadow-sm: 0 1px 2px rgba(138, 90, 98, 0.08), 0 2px 8px rgba(138, 90, 98, 0.06);
+  --shadow-md: 0 6px 24px rgba(138, 90, 98, 0.14);
+  --shadow-lg: 0 18px 48px rgba(138, 90, 98, 0.2);
+
+  /* Movimento */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 450ms;
+
+  /* Layout */
+  --topbar-h: 60px;
+  --max-w: 1180px;
+  --touch: 44px;
+}
