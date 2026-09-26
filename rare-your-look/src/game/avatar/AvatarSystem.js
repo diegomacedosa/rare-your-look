@@ -9,19 +9,19 @@
  * Trocar um batom repinta só o grupo `makeup`; trocar o avatar repinta
  * `base` + `top`. É o que mantém a StudioScene fluida a 60fps.
  */
-import { W, H, bodyMetrics } from './avatar/geometry.js';
-import { paintBaseSkin, paintBodyShape, paintClothesBottom, paintClothesTop } from './avatar/paintBody.js';
-import { paintHairBase, paintHairOverlay } from './avatar/paintHair.js';
+import { W, H, bodyMetrics } from './painters/geometry.js';
+import { paintBaseSkin, paintBodyShape, paintClothesBottom, paintClothesTop } from './painters/paintBody.js';
+import { paintHairBase, paintHairOverlay } from './painters/paintHair.js';
 import {
   paintFaceFeatures, paintMakeupBase, paintMakeupEyes, paintMakeupCheeks, paintMakeupLips,
-} from './avatar/paintFace.js';
-import { paintAccessories } from './avatar/paintAccessories.js';
-import { getProduct, SLOTS, productName } from '../data/products.js';
+} from './painters/paintFace.js';
+import { paintAccessories } from './painters/paintAccessories.js';
+import { getProduct, SLOTS, productName } from '../../data/catalog.js';
 import {
   normalizeAvatar, SKIN_TONES_BY_ID, BODY_SHAPES_BY_ID, HAIR_COLORS_BY_ID, HAIR_STYLES_BY_ID,
   EYE_COLORS_BY_ID, TOP_COLORS_BY_ID, TOPS_BY_ID, BOTTOMS_BY_ID, SCENARIOS_BY_ID, ACCESSORY_GROUPS,
-} from '../data/avatarOptions.js';
-import { mix, darken } from '../utils/color.js';
+} from '../../data/avatarOptions.js';
+import { mix, darken } from '../../shared/color.js';
 
 /** Ordem de renderização do SPEC §7 (de baixo para cima). */
 export const LAYERS = [

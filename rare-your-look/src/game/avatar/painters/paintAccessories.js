@@ -5,7 +5,7 @@
  */
 import { EAR, EYE, roundedRect } from './geometry.js';
 import { coversEars } from './paintHair.js';
-import { alpha, lighten } from '../../utils/color.js';
+import { alpha, lighten } from '../../../shared/color.js';
 
 const GOLD = '#D9B25E';
 const GOLD_DARK = '#A8823A';

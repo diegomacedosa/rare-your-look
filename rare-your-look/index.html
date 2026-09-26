@@ -2,11 +2,13 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#F5EDE4" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#2B1B22" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
       name="description"
-      content="Rare Beauty: Rare Your Look — crie seu avatar, monte looks e complete desafios. There's no one way to be Rare."
+      content="Rare Beauty: Rare Your Look — atravesse três fases, encontre os produtos do look da Maya e monte sua maquiagem no Rare Studio. There's no one way to be Rare."
     />
     <title>Rare Beauty: Rare Your Look</title>
     <link
@@ -16,44 +18,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
-    <a class="skip-link" href="#scene-root">Pular para o conteúdo</a>
+    <main id="game" aria-label="Rare Your Look — jogo"></main>
 
-    <div id="app" class="app">
-      <header class="app-header" role="banner">
-        <button class="brand" type="button" data-nav="welcome" aria-label="Rare Your Look — voltar ao início">
-          <span class="brand__rare">Rare Beauty</span>
-          <span class="brand__game">Rare Your Look</span>
-        </button>
-
-        <div class="app-header__actions">
-          <span class="points-pill" id="header-points" aria-live="off" title="Seus pontos">
-            <span aria-hidden="true">✦</span> <span data-points>0</span> pts
-          </span>
-          <button class="btn btn--icon" type="button" id="btn-sound" aria-pressed="false" aria-label="Desativar som">
-            <span data-icon="sound"></span>
-          </button>
-          <button class="btn btn--icon" type="button" id="btn-settings" aria-label="Configurações">
-            <span data-icon="settings"></span>
-          </button>
-        </div>
-      </header>
-
-      <main id="scene-root" class="scene-root" tabindex="-1"></main>
+    <div id="rotate-hint" class="rotate-hint" role="alert">
+      <div class="rotate-hint__phone" aria-hidden="true"></div>
+      <p class="rotate-hint__title">Gire seu dispositivo para jogar.</p>
+      <p class="rotate-hint__sub">Rare Your Look foi feito para a tela deitada.</p>
     </div>
-
-    <div id="modal-root"></div>
-    <div id="toast-root" class="toast-root" aria-live="polite"></div>
-    <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
     <noscript>
       <p class="noscript">Rare Your Look precisa de JavaScript ativado para funcionar.</p>
     </noscript>
 
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

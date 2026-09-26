@@ -6,8 +6,8 @@
  * o mesmo desenho fica naturalmente atrás de pele, roupa e corpo.
  */
 import { H, roundedRect } from './geometry.js';
-import { alpha, darken, lighten } from '../../utils/color.js';
-import { createRng } from '../../utils/random.js';
+import { alpha, darken, lighten } from '../../../shared/color.js';
+import { createRng } from '../../../shared/random.js';
 
 /** Calota do cabelo: do alto da cabeça até a linha do cabelo. */
 function capPath(ctx, { top = 90, sideL = 116, sideR = 284, hairline = 152, temple = 198 } = {}) {

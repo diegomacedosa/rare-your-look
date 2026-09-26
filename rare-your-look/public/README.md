@@ -1,24 +1,29 @@
 # Assets
 
-As pastas aqui seguem a estrutura da SPEC (§3) e estão **vazias de propósito** no
-protótipo:
+As pastas aqui estão **vazias de propósito**: o protótipo gera toda a arte e todo
+o áudio por código. Elas existem para receber os arquivos finais.
 
-| Pasta | O que vai aqui | Hoje o protótipo usa |
+| Pasta | O que vai aqui | Hoje o jogo usa |
 |---|---|---|
-| `assets/sprites/avatar/` | Camadas PNG/WebP do avatar | Desenho vetorial em Canvas (`src/systems/avatar/`) |
-| `assets/sprites/products/` | Ícones dos produtos | SVG gerado a partir da cor do produto (`ui/components/ProductCard.js`) |
-| `assets/sprites/badges/` | Distintivos | Ícone SVG inline (`ui/icons.js`) |
-| `assets/sprites/characters/` | Personagens dos tutoriais | Mesmo renderer do avatar |
-| `assets/backgrounds/` | Fundos das cenas | Gradientes CSS/Canvas (`data/avatarOptions.js` → `SCENARIOS`) |
-| `assets/ui/` | Ícones de interface | SVG inline |
-| `audio/bgm/` | Trilha instrumental | Trilha gerada ao vivo pela Web Audio API |
-| `audio/sfx/` | Efeitos sonoros | Efeitos sintetizados (`src/audio/sounds.js`) |
+| `assets/sprites/characters/` | Spritesheet da Maya (96×128 por quadro) | Desenho vetorial em Canvas (`src/game/art/maya.ts`) |
+| `assets/sprites/products/` | Ícones dos produtos | Embalagem desenhada pela cor (`src/game/art/textures.ts` → `drawProduct`) |
+| `assets/sprites/avatar/` | Camadas do retrato do Rare Studio | Compositor em camadas (`src/game/avatar/`) |
+| `assets/backgrounds/` | Céu e camadas de parallax das fases, quarto | Gradientes e silhuetas em Canvas (`textures.ts`) |
+| `assets/ui/` | Rare Box, espelhos, placas, ícones | Canvas (`textures.ts`) |
+| `audio/bgm/` | Trilhas | Sequenciador Web Audio (`src/game/systems/sounds.ts` → `MUSIC`) |
+| `audio/sfx/` | Efeitos sonoros | Síntese Web Audio (`sounds.ts` → `SFX`) |
 
 ## Quando os assets reais chegarem
 
-1. Coloque os arquivos nas pastas acima com os nomes usados em `src/audio/sounds.js`
-   (`SFX_MAP[...].src`).
-2. Troque `ASSETS_AVAILABLE` para `true` em `src/audio/sounds.js` — o AudioManager
-   passa a carregar os arquivos e cai no som sintetizado só se algum faltar.
-3. Para sprites do avatar, os "painters" em `src/systems/avatar/` podem ser
-   substituídos por `ctx.drawImage()` mantendo a mesma ordem de camadas do SPEC §7.
+**Imagens:** coloque o arquivo em `public/assets/...` e adicione uma linha em
+`src/data/assets.ts` com a mesma chave usada pelo jogo, por exemplo:
+
+```ts
+{ key: 'product-blush', url: 'assets/sprites/products/blush.png' },
+{ key: 'maya', url: 'assets/sprites/characters/maya.png', frame: { frameWidth: 96, frameHeight: 128 } },
+```
+
+O gerador de placeholders pula qualquer chave que já tenha sido carregada.
+
+**Sons:** use os nomes de `SFX[...].src` em `src/game/systems/sounds.ts` e troque
+`ASSETS_AVAILABLE` para `true`. Efeitos que faltarem continuam sintetizados.

@@ -1,91 +1,84 @@
-# Decisões técnicas e desvios da SPEC
+# Decisões técnicas — v2 (Platform Edition)
 
-Documento de apoio ao prompt 002 (SPEC §14). Tudo aqui é decisão de
-implementação — a SPEC e o GDD continuam sendo a fonte de verdade do escopo.
+A SPEC v2 (`docs/SPEC.md`) é a fonte de verdade do escopo. Este documento
+registra como ela foi implementada e o que foi reaproveitado da v1.
 
-## 1. Arquitetura
+## 1. O que veio da v1
 
-| Decisão | Por quê |
-|---|---|
-| `GameState` valida transições numa tabela | Erro de fluxo vira aviso no console em vez de tela quebrada |
-| Cenas carregadas com `import()` dinâmico | O Vite gera um chunk por cena: a tela inicial baixa ~11 KB gzip |
-| Cenas são classes com `mount/unmount/shortcuts` | Contrato único; o `SceneManager` cuida de foco, transição e teclado |
-| `EventBus` só para o que cruza módulos | Estado de cena fica na cena; nada de "estado global de tudo" |
-| Pastas extras: `src/utils/`, `ui/icons.js`, `systems/avatar/`, `systems/RankingSystem.js` | A SPEC §3 não previa, mas evitam arquivos de 800 linhas |
+A v1 era um jogo de "vestir o avatar" em DOM + Canvas. A regra da SPEC §46 era
+não apagar nada antes de verificar o que servia. Resultado:
 
-## 2. Avatar em Canvas (SPEC §7)
+| Da v1 | Na v2 | Como |
+|---|---|---|
+| Compositor de avatar em 12 camadas (`AvatarSystem.js` + `painters/`) | **Rare Studio, Reveal e Coleção** | Reaproveitado sem mudanças de lógica. `game/avatar/portrait.ts` pinta num canvas e registra como textura do Phaser; trocar um tom repinta só o grupo `makeup`. |
+| Catálogo de tons (`data/products.js`) | `data/catalog.js` | Mesmos tons, cores e acabamentos. `data/products.ts` agrupa em **produtos** no formato da SPEC §16 e liga os tons bloqueados aos itens secretos. |
+| Opções de avatar (`avatarOptions.js`) | Maya no Rare Studio | A Maya é um avatar fixo (tom 4, cabelo ondulado, argolas, sardas). |
+| `AudioManager.js` (Web Audio sintetizado) | `game/systems/AudioSystem.ts` | Porte para TypeScript com o mesmo envelope sem clique e o mesmo "delay" da trilha. Ganhou ruído filtrado, 25 efeitos e 5 trilhas. |
+| Arte SVG das embalagens (`ProductCard.js`) | `art/textures.ts` → `drawProduct` | Portada para Canvas 2D. |
+| `StorageManager.js` | `game/systems/storage.ts` | Mesmo fallback para memória quando o localStorage é bloqueado. |
+| Tokens de cor (`tokens.css`) | `game/theme.ts` + `styles/game.css` | Mesma paleta nude/rosé/mauve. |
+| `utils/color.js`, `utils/random.js` | `shared/` | Sem mudanças. |
 
-- As 12 camadas existem com os nomes do SPEC (`LAYER_ORDER` em `AvatarSystem.js`).
-- `hair_base` é composta com `destination-over`: assim o volume de trás do cabelo
-  fica atrás de pele, roupa e corpo sem precisar inverter a ordem do SPEC.
-- `clothes_top` e `hair_overlay` são pintadas em canvas isolado porque usam
-  `destination-out` (decotes, mangas, abertura do hijab).
-- **Cache por grupo**: `base` (pele/corpo/roupa/rosto), `makeup` (4 camadas) e
-  `top` (cabelo da frente + acessórios). Trocar um batom repinta só o grupo
-  `makeup` — é o que segura os 60fps na StudioScene e nos tutoriais.
-- Resolução do canvas segue o tamanho em tela × DPR (teto de 2×), com
-  `ResizeObserver` para redesenhar quando o layout muda.
-- Sprites PNG podem substituir os painters depois sem mexer no compositor.
+O que não servia mais (cenas DOM, desafios, ranking, recompensas) foi movido
+para `legacy/` — fora do bundle, preservado para consulta.
 
-## 3. Regras e pontuação
+## 2. Arquitetura
 
-- Pontuação segue a tabela do SPEC §5.2. `maxScore()` já inclui o bônus de
-  surpresa quando o desafio pode sorteá-la (Rare Mode chega a ~325).
-- **Regra principal é obrigatória para pontuar**: sem ela o desafio não conclui e
-  o look vale 0. A StudioScene avisa antes de confirmar, então nunca é surpresa.
-- **Tempo esgotado não invalida a partida**: o look é confirmado como está e só os
-  bônus de tempo são perdidos — coerente com "Concluído dentro do tempo: +25" do
-  SPEC §5.2 e mais gentil para um casual game.
-- Regras de cor (`required_color`) comparam em **CIE Lab (ΔE76)** com tolerância
-  por desafio. As tolerâncias foram calibradas olhando a distância real entre os
-  tons do catálogo (`npm run check:data` imprime as soluções encontradas).
-- `findSolution()` é um solver por força bruta sobre os encaixes. Ele serve a
-  três coisas: QA ("este desafio é possível?"), filtro das regras surpresa
-  (nunca sorteia algo impossível) e o botão de dica.
+- **Phaser 3 + TypeScript estrito + Vite** (SPEC §36). O HTML só hospeda o canvas
+  e o aviso de orientação.
+- **Uma cena de fase para as três fases.** `LevelScene` recebe o layout; `Level1Scene`
+  … `Level3Scene` só dizem qual. Foi o que resolveu o "a fase 2 não funcionou":
+  não existe código específico de fase para quebrar.
+- **Fases desenhadas à mão** com um construtor fluente (`levels/types.ts`):
+  uma linha por elemento, ids estáveis para salvar o que já foi coletado.
+- **HUD em cena paralela** (`HUDScene`), conversando com a fase por um canal
+  tipado (`hudBus`). A fase anuncia o que aconteceu; a HUD decide como mostrar.
+- **Estado único** em `ProgressSystem` (SPEC §38) + coleção que sobrevive entre
+  partidas. Tudo salvo em localStorage.
+- **Arte separada da lógica** (SPEC §41): todas as texturas são geradas em
+  `art/` com chaves estáveis. Para usar arte final, adicione o arquivo em
+  `src/data/assets.ts` com a mesma chave — o gerador pula chaves já carregadas.
 
-## 4. Progressão
+## 3. Física e level design
 
-- Desafios abrem por quantidade de desafios concluídos (`unlock.completed`), não
-  por pontos — a dificuldade cresce junto com a prática, como pede o GDD §2.9.
-- Recompensas entram numa fila (`pendingRewards`) e só viram acervo no
-  "Adicionar à Coleção". Se a jogadora sair antes, o aviso continua na tela
-  inicial — ninguém perde item.
-- Rejogar desafio dá pontos de novo (alimenta o ranking semanal), mas a
-  recompensa do desafio só sai na primeira conclusão.
-- **Nada de representação é recompensa.** Tom de pele, corpo, cabelo, hijab,
-  vitiligo, cicatriz, cadeira de rodas e prótese nascem liberados; só roupas,
-  acessórios, cores extras, cenários e novos tons de produto são desbloqueáveis.
+- Números medidos no jogo: pulo de **~202 px** de altura e **~314 px** de alcance
+  em velocidade máxima. Regras de design: vãos ≤ 200 px, degraus ≤ 160 px,
+  Rare Box a 130 px do chão (dá para passar por baixo e subir em cima).
+- Coyote time (110 ms), buffer de pulo (130 ms) e pulo variável: controle antes
+  de realismo (SPEC §8).
+- Plataformas flutuantes são "macias" (atravessa pulando por baixo). Móveis andam
+  por velocidade para o Arcade Physics carregar a Maya.
+- Produto que sai de uma Rare Box fica suspenso e depois **desce ao lado da
+  caixa, na altura da Maya** — pegar um item acima da caixa exigia um pulo
+  lateral preciso demais para iniciantes.
+- Ajustes encontrados em teste: mover do caminho de baixo da Fase 3 era mais
+  rápido que a Maya; plataforma frágil antes de um mover dependia de sorte;
+  pincéis horizontais passavam de 450 px/s. Todos corrigidos.
 
-## 5. Áudio
+## 4. Pontuação (SPEC §27)
 
-- Sem arquivos de áudio no protótipo: efeitos e trilha são **sintetizados** na
-  Web Audio API (`sounds.js` guarda a receita de cada efeito e a progressão de
-  quatro acordes da trilha).
-- `SFX_MAP` já tem o caminho do `.mp3` de cada efeito; basta virar
-  `ASSETS_AVAILABLE = true` quando os arquivos existirem.
-- O contexto de áudio só é criado no primeiro gesto da usuária (política de
-  autoplay) e o volume de trilha/efeitos fica salvo nas configurações.
+Produto 100 · secreto 150 · Rare Box 25 · paleta 10 · fase 500 · todas as
+paletas +200 · tempo abaixo da referência +3/s (até 450). O Rare Studio não mexe
+em pontos: o look é expressão, não avaliação (SPEC §25).
 
-## 6. Robustez encontrada em teste
+## 5. Áudio (SPEC §35)
 
-- **Transição de cena com a aba escondida**: `element.animate().finished` nunca
-  resolve quando o navegador para de desenhar, e o jogo travava na troca de tela.
-  Agora a transição tem tempo-limite e, com a aba oculta, aplica o estado final
-  direto.
-- **Contadores animados** (pontuação) caem para o valor final quando
-  `document.hidden` — sem isso o número ficava congelado em 0.
-- **Cronômetro**: além de pausar em `visibilitychange`, ele desconta buracos
-  maiores que 0,9s entre quadros. Janela minimizada ou encoberta não come tempo
-  de jogo.
+Tudo sintetizado ao vivo (Web Audio), sem arquivos e sem música comercial.
+Efeitos: interface, pulo, aterrissagem, paleta, Rare Box, batida em caixa vazia,
+item surgindo, produto, secreto, coração, checkpoint, dano, queda, "respire
+fundo", plataforma frágil, portal fechado/aberto, fase concluída, placa, whoosh,
+brilho, escolher produto, aplicar/remover maquiagem, reveal. Trilhas: menu,
+uma por fase e Rare Studio/cutscenes. **Música ON/OFF** e **Som ON/OFF**
+separados, salvos no localStorage. Para usar arquivos finais, ligar
+`ASSETS_AVAILABLE` em `systems/sounds.ts`.
 
-## 7. O que ainda falta para virar produção
+## 6. Robustez
 
-1. Assets oficiais (sprites do avatar, embalagens, trilha e efeitos) e validação
-   dos nomes de linha/tom com a marca.
-2. Backend opcional para ranking real e persistência entre dispositivos.
-3. Testes automatizados de UI (hoje só `npm run check:data` cobre a camada de
-   dados/regras) e passagem de QA cross-browser real (Safari iOS incluso).
-4. Conteúdo: mais desafios por tipo (Color Explorer e Mood Master pedem 5
-   conclusões cada, hoje alcançadas rejogando).
-5. Revisão de copy e de acessibilidade com pessoas com deficiência — a
-   representação foi desenhada com cuidado, mas precisa de validação com quem vive.
+- O primeiro gesto libera o áudio; uma trilha pedida antes disso começa no
+  desbloqueio.
+- Aba escondida suspende o áudio; o tempo de fase só corre com a cena ativa
+  (pausa não conta).
+- As cutscenes não usam zoom de câmera (os botões fixos saíam da tela) nem
+  `RenderTexture` para o foco de luz: é uma textura de canvas comum.
+- Celular em pé mostra "Gire seu dispositivo para jogar"; em pé ou deitado o
+  canvas escala proporcionalmente (1280×720 lógico).

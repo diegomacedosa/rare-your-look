@@ -9,8 +9,8 @@ import {
   EYE, BROW, NOSE, MOUTH, CHEEK,
   facePath, eyePath, lipsPath, mouthLinePath, lidPath, softRadial,
 } from './geometry.js';
-import { alpha, darken, lighten, mix } from '../../utils/color.js';
-import { createRng } from '../../utils/random.js';
+import { alpha, darken, lighten, mix } from '../../../shared/color.js';
+import { createRng } from '../../../shared/random.js';
 
 const eyeX = (dir) => 200 + dir * EYE.dx; // dir -1 = lado esquerdo da tela
 

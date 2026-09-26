@@ -6,8 +6,8 @@ import {
   W, H, FACE, EAR, NECK, WAIST_Y, SLEEVE_SHORT, SLEEVE_LONG,
   facePath, neckPath, bodyPath, blob, roundedRect, softRadial,
 } from './geometry.js';
-import { alpha, darken, lighten, mix } from '../../utils/color.js';
-import { createRng } from '../../utils/random.js';
+import { alpha, darken, lighten, mix } from '../../../shared/color.js';
+import { createRng } from '../../../shared/random.js';
 
 const VITILIGO_TINT = '#F7E9E0';
 
