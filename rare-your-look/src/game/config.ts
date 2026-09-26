@@ -29,7 +29,9 @@ export function createGameConfig(parent: string): Phaser.Types.Core.GameConfig {
     backgroundColor: COLORS.night,
     scale: {
       mode: Phaser.Scale.FIT,
-      autoCenter: Phaser.Scale.CENTER_BOTH,
+      // a centralização fica com o CSS (#game em flex); centralizar nos dois
+      // lugares somava margens e empurrava o canvas para a direita
+      autoCenter: Phaser.Scale.NO_CENTER,
     },
     render: { antialias: true, roundPixels: false },
     physics: {
