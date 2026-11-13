@@ -14,7 +14,7 @@ import { PRODUCTS_BY_ID, SECRETS_BY_ID, productsForStage } from '../../data/prod
 import { DAMAGE_LINES, RARE_TIPS } from '../../data/dialogue';
 import { GROUND_Y, KILL_Y, WORLD_HEIGHT, BOX_SIZE, type LevelLayout } from '../levels/types';
 import { GAME_WIDTH, GAME_HEIGHT, THEMES, FONT_BODY, HEX } from '../theme';
-import { platformKey } from '../art/textures';
+import { platformKey, iconScale } from '../art/textures';
 import { Player } from '../entities/Player';
 import { RareBox } from '../entities/RareBox';
 import { Pickup, type PickupKind } from '../entities/Product';
@@ -431,7 +431,7 @@ export class LevelScene extends Phaser.Scene {
       }
       case 'palette': {
         // a paleta salta e entra direto na bolsa, como uma moeda
-        const pal = this.add.image(box.x, topY, 'palette').setDepth(30);
+        const pal = this.add.image(box.x, topY, 'palette').setScale(iconScale(this, 'palette')).setDepth(30);
         this.tweens.add({ targets: pal, y: topY - 80, duration: 260, ease: 'Quad.easeOut', yoyo: true, onComplete: () => pal.destroy() });
         this.collectPalette(box.def.id, box.x, topY - 60);
         break;

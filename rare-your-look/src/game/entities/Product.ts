@@ -28,9 +28,10 @@ export class Pickup extends Phaser.Physics.Arcade.Image {
     this.body.moves = false;
     this.setDepth(12);
 
-    this.baseScale = kind === 'product' ? 0.8 * iconScale(scene, texture) : 1;
+    this.baseScale = kind === 'product' ? 0.8 * iconScale(scene, texture) : kind === 'palette' ? iconScale(scene, texture) : 1;
     this.setScale(this.baseScale);
-    if (kind === 'palette') this.body.setSize(40, 36);
+    // área de coleta da paleta: 40×36 px na tela, qualquer que seja a resolução da textura
+    if (kind === 'palette') this.body.setSize(40 / this.baseScale, 36 / this.baseScale);
 
     if (kind === 'product' || kind === 'secret') {
       // halo que destaca os itens importantes

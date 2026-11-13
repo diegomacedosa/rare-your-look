@@ -241,12 +241,13 @@ export class HUDScene extends Phaser.Scene {
   }
 
   private flyPalette(x: number, y: number): void {
-    const p = this.add.image(x, y, 'palette').setScale(0.8);
+    const k = iconScale(this, 'palette');
+    const p = this.add.image(x, y, 'palette').setScale(0.8 * k);
     this.tweens.add({
       targets: p,
       x: 40,
       y: 104,
-      scale: 0.3,
+      scale: 0.3 * k,
       alpha: 0.6,
       duration: 520,
       ease: 'Cubic.easeIn',

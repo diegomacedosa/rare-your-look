@@ -25,6 +25,10 @@ const PRODUCT_PHOTOS = ['blush', 'lipstick', 'lipoil', 'eyeshadow', 'liner', 'hi
 
 export const ASSET_OVERRIDES: AssetOverride[] = [
   ...PRODUCT_PHOTOS.map((id) => ({ key: `product-${id}`, url: `assets/sprites/products/${id}.png` })),
+  // paleta de cores coletável: bandeja real de 8 godês (96×48, exibida a 52 px)
+  { key: 'palette', url: 'assets/ui/palette.png' },
+  // fotos maiores, usadas bem suaves no fundo dos cenários (camada mid-<tema>)
+  ...PRODUCT_PHOTOS.map((id) => ({ key: `bgprod-${id}`, url: `assets/backgrounds/prod-${id}.png` })),
 ];
 
 /**

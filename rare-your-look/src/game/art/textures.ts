@@ -65,9 +65,29 @@ export const PRODUCT_ICON_W = 56;
  * se o PNG faltar, o placeholder de 56×72 entra e o fator volta a 1.
  */
 export function iconScale(scene: Phaser.Scene, key: string): number {
-  if (!key.startsWith('product-') || !scene.textures.exists(key)) return 1;
+  const logical = key.startsWith('product-') ? PRODUCT_ICON_W : key === 'palette' ? PALETTE_W : 0;
+  if (!logical || !scene.textures.exists(key)) return 1;
   const width = scene.textures.get(key).get().width;
-  return width > 0 ? PRODUCT_ICON_W / width : 1;
+  // o placeholder da paleta (44 px) já está no tamanho lógico
+  return width > logical ? logical / width : 1;
+}
+
+/** Largura lógica da paleta de cores (a foto real tem 96 px, desenhada a 52). */
+export const PALETTE_W = 52;
+
+/** Imagem já carregada (logo, foto) para desenhar dentro de um canvas; null se faltar. */
+function loadedImage(scene: Phaser.Scene, key: string): CanvasImageSource | null {
+  if (!scene.textures.exists(key)) return null;
+  const src = scene.textures.get(key).getSourceImage();
+  return src instanceof HTMLImageElement || src instanceof HTMLCanvasElement ? src : null;
+}
+
+/** Símbolo R do logotipo centrado em (cx, cy) com o diâmetro dado. */
+function drawLogoR(ctx: CanvasRenderingContext2D, logo: CanvasImageSource, cx: number, cy: number, size: number): void {
+  ctx.save();
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(logo, cx - size / 2, cy - size / 2, size, size);
+  ctx.restore();
 }
 
 /** Porte para Canvas do `productArt` (SVG) da v1 — embalagem a partir da cor. */
@@ -236,7 +256,8 @@ function drawFar(theme: LevelTheme, seed: number): Draw {
  * Camada do meio: silhuetas gigantes de produtos e o wordmark da marca —
  * presença de marca no cenário (feedback da professora, item 8).
  */
-function drawMid(theme: LevelTheme, kinds: Product['kind'][]): Draw {
+function drawMid(theme: LevelTheme, kinds: Product['kind'][], photos: CanvasImageSource[], logo: CanvasImageSource | null): Draw {
+  if (photos.length) return drawMidPhotos(theme, photos, logo);
   return (ctx, w, h) => {
     const tone = alpha(theme.mid, 0.75);
     kinds.forEach((kind, i) => {
@@ -254,6 +275,54 @@ function drawMid(theme: LevelTheme, kinds: Product['kind'][]): Draw {
     wordmark(ctx, 'RARE BEAUTY', w * 0.52, h * 0.3, 30, alpha('#FFFFFF', 0.4), 0.45);
   };
 }
+
+/**
+ * Camada do meio com as FOTOS reais dos produtos: grandes, levemente tingidas
+ * com a cor do tema e bem transparentes, para dar presença de marca sem
+ * competir com plataformas e coletáveis.
+ */
+function drawMidPhotos(theme: LevelTheme, photos: CanvasImageSource[], logo: CanvasImageSource | null): Draw {
+  return (ctx, w, h) => {
+    const layer = makeCanvas(w, h, (lc) => {
+      lc.imageSmoothingQuality = 'high';
+      const slot = w / photos.length;
+      photos.forEach((img, i) => {
+        const iw = (img as HTMLImageElement).width;
+        const ih = (img as HTMLImageElement).height;
+        const targetH = i % 2 ? 300 : 240;
+        const k = Math.min(targetH / ih, (slot - 40) / iw);
+        const dw = iw * k;
+        const dh = ih * k;
+        lc.drawImage(img, i * slot + (slot - dw) / 2, h - 90 - dh, dw, dh);
+      });
+      // tinge com a cor do tema para as fotos "afundarem" no cenário
+      lc.globalCompositeOperation = 'source-atop';
+      lc.fillStyle = alpha(theme.mid, 0.35);
+      lc.fillRect(0, 0, w, h);
+    });
+    ctx.save();
+    ctx.globalAlpha = 0.32;
+    ctx.drawImage(layer, 0, 0);
+    ctx.restore();
+    if (logo) {
+      const lw = (logo as HTMLImageElement).width * 1.4;
+      const lh = (logo as HTMLImageElement).height * 1.4;
+      ctx.save();
+      ctx.globalAlpha = 0.4;
+      ctx.drawImage(logo, w * 0.52 - lw / 2, h * 0.3 - lh / 2, lw, lh);
+      ctx.restore();
+    } else {
+      wordmark(ctx, 'RARE BEAUTY', w * 0.52, h * 0.3, 30, alpha('#FFFFFF', 0.4), 0.45);
+    }
+  };
+}
+
+/** Produtos que aparecem no fundo de cada tema (os da própria fase primeiro). */
+const THEME_PHOTOS: Record<string, string[]> = {
+  color: ['blush', 'lipstick', 'lipoil', 'highlight'],
+  build: ['eyeshadow', 'liner', 'highlight', 'mascara'],
+  rare: ['bronzer', 'mascara', 'lipstick', 'eyeshadow'],
+};
 
 function drawBedroom(ctx: CanvasRenderingContext2D, w: number, h: number): void {
   // parede
@@ -703,6 +772,9 @@ export function generateTextures(scene: Phaser.Scene): void {
     ctx.fillRect(29, 70, 6, 16);
   });
 
+  // símbolo R do logotipo oficial (placa Rare Tip e Rare Bag)
+  const logoR = loadedImage(scene, 'logo-r');
+
   // Placa "Rare Tip"
   register(scene, 'sign', 76, 96, (ctx) => {
     ctx.fillStyle = '#B08D57';
@@ -714,12 +786,15 @@ export function generateTextures(scene: Phaser.Scene): void {
     ctx.lineWidth = 3;
     ctx.stroke();
     ctx.fillStyle = '#8A5A62';
-    ctx.font = '700 22px "Playfair Display", Georgia, serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('R', 38, 24);
+    if (logoR) drawLogoR(ctx, logoR, 38, 24, 28);
+    else {
+      ctx.font = '700 22px "Playfair Display", Georgia, serif';
+      ctx.fillText('R', 38, 24);
+    }
     ctx.font = '700 10px "DM Sans", sans-serif';
-    ctx.fillText('RARE TIP', 38, 44);
+    ctx.fillText('RARE TIP', 38, 46);
   });
 
   // Rare Bag (HUD)
@@ -735,11 +810,14 @@ export function generateTextures(scene: Phaser.Scene): void {
     ctx.fillStyle = g;
     rr(ctx, 5, 15, 38, 31, 9);
     ctx.fill();
-    ctx.fillStyle = '#8A5A62';
-    ctx.font = '700 15px "Playfair Display", Georgia, serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('R', 24, 31);
+    if (logoR) drawLogoR(ctx, logoR, 24, 31, 21);
+    else {
+      ctx.fillStyle = '#8A5A62';
+      ctx.font = '700 15px "Playfair Display", Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('R', 24, 31);
+    }
   });
 
   // Partículas
@@ -764,7 +842,10 @@ export function generateTextures(scene: Phaser.Scene): void {
     const theme = THEMES[id];
     register(scene, `sky-${id}`, 1280, 720, drawSky(theme));
     register(scene, `far-${id}`, 1280, 720, drawFar(theme, i + 1));
-    register(scene, `mid-${id}`, 1280, 720, drawMid(theme, kinds.slice(i, i + 4)));
+    const photos = (THEME_PHOTOS[id] ?? [])
+      .map((p) => loadedImage(scene, `bgprod-${p}`))
+      .filter((img): img is CanvasImageSource => img !== null);
+    register(scene, `mid-${id}`, 1280, 720, drawMid(theme, kinds.slice(i, i + 4), photos, loadedImage(scene, 'logo-rare-beauty-white')));
   });
 
   register(scene, 'bedroom', 1280, 720, drawBedroom);

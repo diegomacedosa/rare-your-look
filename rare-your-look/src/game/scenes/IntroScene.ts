@@ -151,7 +151,7 @@ export class IntroScene extends Phaser.Scene {
     // mini-legenda: paleta vs. produto (feedback item 2 — sem confusão entre os coletáveis)
     const legend = this.add.container(0, 104);
     legend.add([
-      this.add.image(-200, 0, 'palette'),
+      this.add.image(-200, 0, 'palette').setScale(iconScale(this, 'palette')),
       this.add.text(-172, 0, 'Paleta de cores = pontos', bodyText(14, COLORS.ink)).setOrigin(0, 0.5),
       this.add.image(40, 0, 'rarebox').setScale(0.7),
       this.add.text(66, 0, 'Rare Box = produto do look', bodyText(14, COLORS.ink)).setOrigin(0, 0.5),
