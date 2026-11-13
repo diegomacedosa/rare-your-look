@@ -23,6 +23,7 @@ import { brandBackdrop, brandMark, fadeIn, goTo } from '../ui/helpers';
 import { Portrait } from '../avatar/portrait';
 import progress from '../systems/ProgressSystem';
 import audio from '../systems/AudioSystem';
+import { iconScale } from '../art/textures';
 
 const MIRROR = { x: 340, y: 380 };
 const PANEL = { x: 905, w: 690 };
@@ -198,7 +199,7 @@ export class DressingRoomScene extends Phaser.Scene {
       bg.fillRoundedRect(-75, -52, 150, 104, 18);
       bg.lineStyle(active ? 3 : 1.5, active ? HEX.mauve : HEX.rose, active ? 1 : 0.5);
       bg.strokeRoundedRect(-75, -52, 150, 104, 18);
-      const icon = this.add.image(-38, -2, p.icon).setScale(0.78);
+      const icon = this.add.image(-38, -2, p.icon).setScale(0.78 * iconScale(this, p.icon));
       // bolinha com o tom aplicado
       const dot = this.add.circle(10, 30, 8, Phaser.Display.Color.HexStringToColor(this.shadeColor(p) ?? '#FFFFFF').color).setVisible(applied);
       card.add([

@@ -7,6 +7,7 @@ import Phaser from 'phaser';
 import { ASSET_OVERRIDES } from '../../data/assets';
 import { generateTextures } from '../art/textures';
 import { registerMayaAnimations } from '../entities/Player';
+import { brandMark } from '../ui/helpers';
 import { COLORS, GAME_WIDTH, GAME_HEIGHT, displayText, labelText, HEX } from '../theme';
 
 export class PreloadScene extends Phaser.Scene {
@@ -17,7 +18,7 @@ export class PreloadScene extends Phaser.Scene {
   preload(): void {
     const cx = GAME_WIDTH / 2;
     const cy = GAME_HEIGHT / 2;
-    this.add.text(cx, cy - 70, 'RARE BEAUTY', labelText(18, COLORS.rose)).setOrigin(0.5).setLetterSpacing(9);
+    brandMark(this, cx, cy - 76, COLORS.white, 18);
     this.add.text(cx, cy - 26, 'Rare Your Look', displayText(44, COLORS.white)).setOrigin(0.5);
     const barW = 360;
     this.add.rectangle(cx, cy + 40, barW, 6, 0xffffff, 0.15).setOrigin(0.5);

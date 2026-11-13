@@ -12,6 +12,7 @@ import { brandBackdrop, brandMark, fadeIn, goTo, onConfirm } from '../ui/helpers
 import progress from '../systems/ProgressSystem';
 import audio from '../systems/AudioSystem';
 import { formatTime, type LevelBonus } from '../systems/ScoreSystem';
+import { iconScale } from '../art/textures';
 
 export class LevelCompleteScene extends Phaser.Scene {
   private levelId = 1;
@@ -64,7 +65,7 @@ export class LevelCompleteScene extends Phaser.Scene {
     products.forEach((p, i) => {
       const x = cx + (i - (products.length - 1) / 2) * 110;
       const icon = this.add.image(x, 272, p.icon).setScale(0);
-      this.tweens.add({ targets: icon, scale: 0.9, duration: 350, delay: 300 + i * 150, ease: 'Back.easeOut', onStart: () => audio.play('palette') });
+      this.tweens.add({ targets: icon, scale: 0.9 * iconScale(this, p.icon), duration: 350, delay: 300 + i * 150, ease: 'Back.easeOut', onStart: () => audio.play('palette') });
       this.add.text(x, 322, p.label.toUpperCase(), labelText(11, COLORS.mauve)).setOrigin(0.5).setLetterSpacing(2);
     });
 

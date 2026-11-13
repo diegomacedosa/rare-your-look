@@ -3,6 +3,7 @@
  * (SPEC §10). Todos flutuam e são coletados ao encostar.
  */
 import Phaser from 'phaser';
+import { iconScale } from '../art/textures';
 
 export type PickupKind = 'product' | 'secret' | 'palette' | 'heart' | 'bonus';
 
@@ -27,7 +28,7 @@ export class Pickup extends Phaser.Physics.Arcade.Image {
     this.body.moves = false;
     this.setDepth(12);
 
-    this.baseScale = kind === 'product' ? 0.8 : 1;
+    this.baseScale = kind === 'product' ? 0.8 * iconScale(scene, texture) : 1;
     this.setScale(this.baseScale);
     if (kind === 'palette') this.body.setSize(40, 36);
 

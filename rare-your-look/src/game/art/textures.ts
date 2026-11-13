@@ -56,6 +56,20 @@ function sparkle(ctx: CanvasRenderingContext2D, x: number, y: number, r: number,
 }
 
 // ------------------------------------------------------------------ produtos
+/** Tamanho lógico do ícone de produto: todas as escalas do jogo partem dele. */
+export const PRODUCT_ICON_W = 56;
+
+/**
+ * Fator que leva qualquer textura de produto ao tamanho lógico de 56 px.
+ * As fotos reais têm o dobro da resolução (112×144) para ficarem nítidas;
+ * se o PNG faltar, o placeholder de 56×72 entra e o fator volta a 1.
+ */
+export function iconScale(scene: Phaser.Scene, key: string): number {
+  if (!key.startsWith('product-') || !scene.textures.exists(key)) return 1;
+  const width = scene.textures.get(key).get().width;
+  return width > 0 ? PRODUCT_ICON_W / width : 1;
+}
+
 /** Porte para Canvas do `productArt` (SVG) da v1 — embalagem a partir da cor. */
 export function drawProduct(ctx: CanvasRenderingContext2D, kind: Product['kind'], color: string, w = 56, h = 72): void {
   ctx.save();

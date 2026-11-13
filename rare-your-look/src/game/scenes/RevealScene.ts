@@ -15,6 +15,7 @@ import progress from '../systems/ProgressSystem';
 import Inventory from '../systems/InventorySystem';
 import audio from '../systems/AudioSystem';
 import { formatTime } from '../systems/ScoreSystem';
+import { iconScale } from '../art/textures';
 
 export class RevealScene extends Phaser.Scene {
   private portrait!: Portrait;
@@ -76,7 +77,7 @@ export class RevealScene extends Phaser.Scene {
       const row = Math.floor(i / 4);
       const x = cx - 240 + col * 160;
       const y = 285 + row * 96;
-      this.add.image(x - 40, y, product.icon).setScale(0.55);
+      this.add.image(x - 40, y, product.icon).setScale(0.55 * iconScale(this, product.icon));
       this.add.circle(x - 22, y + 22, 7, Phaser.Display.Color.HexStringToColor(shade.color).color).setStrokeStyle(2, 0xffffff);
       this.add.text(x - 10, y - 16, product.label.toUpperCase(), labelText(11, COLORS.ink)).setLetterSpacing(1);
       this.add.text(x - 10, y + 2, shade.name, bodyText(13, COLORS.mauve));

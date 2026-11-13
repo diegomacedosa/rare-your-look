@@ -50,9 +50,29 @@ export function brandBackdrop(scene: Phaser.Scene, dark = false): void {
   }
 }
 
-/** Wordmark "RARE BEAUTY" em caixa-alta espaçada. */
-export function brandMark(scene: Phaser.Scene, x: number, y: number, color: string = COLORS.mauve, size = 16): Phaser.GameObjects.Text {
-  return scene.add.text(x, y, 'RARE BEAUTY', labelText(size, color)).setOrigin(0.5).setLetterSpacing(size * 0.5);
+/**
+ * Logotipo Rare Beauty (símbolo R + nome). `size` segue a escala antiga do
+ * texto em caixa-alta: a altura do logo fica em ~2,4× esse valor.
+ * Em mauve/ink usa o logo na cor oficial; nas outras cores usa a versão
+ * branca tingida, para manter o contraste pensado para cada tela.
+ * Se o PNG não carregar, volta ao wordmark em texto.
+ */
+export function brandMark(
+  scene: Phaser.Scene,
+  x: number,
+  y: number,
+  color: string = COLORS.mauve,
+  size = 16,
+): Phaser.GameObjects.Image | Phaser.GameObjects.Text {
+  const official = color === COLORS.mauve || color === COLORS.ink;
+  const key = official ? 'logo-rare-beauty' : 'logo-rare-beauty-white';
+  if (!scene.textures.exists(key)) {
+    return scene.add.text(x, y, 'RARE BEAUTY', labelText(size, color)).setOrigin(0.5).setLetterSpacing(size * 0.5);
+  }
+  const logo = scene.add.image(x, y, key).setOrigin(0.5);
+  logo.setScale((size * 2.4) / logo.height);
+  if (!official) logo.setTint(Phaser.Display.Color.HexStringToColor(color).color);
+  return logo;
 }
 
 /** Par de botões Som / Música (SPEC §35). */

@@ -4,10 +4,16 @@
  * deixaria "R" e "RARE TIP" em Georgia para sempre.
  */
 import Phaser from 'phaser';
+import { BRAND_ASSETS } from '../../data/assets';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
     super('BootScene');
+  }
+
+  /** O logotipo vem antes de tudo para já aparecer na tela de carregamento. */
+  preload(): void {
+    for (const asset of BRAND_ASSETS) this.load.image(asset.key, asset.url);
   }
 
   create(): void {

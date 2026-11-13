@@ -15,6 +15,7 @@ import { Button, panel } from '../ui/Button';
 import { speech } from '../ui/bubble';
 import { fadeIn, goTo, onConfirm, brandMark, spotlight } from '../ui/helpers';
 import audio from '../systems/AudioSystem';
+import { iconScale } from '../art/textures';
 
 const FLOOR = 562;
 const VANITY_X = 820;
@@ -76,7 +77,7 @@ export class IntroScene extends Phaser.Scene {
     this.at(9.8, () => {
       // contornos vazios onde os produtos deveriam estar
       [-120, -60, 60, 120].forEach((dx, i) => {
-        const ghost = this.add.image(VANITY_X + dx, FLOOR - 160, PRODUCTS[i]!.icon).setScale(0.55).setTint(0xc9b3ad).setAlpha(0);
+        const ghost = this.add.image(VANITY_X + dx, FLOOR - 160, PRODUCTS[i]!.icon).setScale(0.55 * iconScale(this, PRODUCTS[i]!.icon)).setTint(0xc9b3ad).setAlpha(0);
         this.tweens.add({ targets: ghost, alpha: 0.5, duration: 300, delay: i * 120 });
         this.add.text(VANITY_X + dx, FLOOR - 196, '?', displayText(18, COLORS.mauve)).setOrigin(0.5);
       });
@@ -91,13 +92,14 @@ export class IntroScene extends Phaser.Scene {
       this.tweens.add({ targets: glow, alpha: 1, scale: 22, duration: 2400, ease: 'Sine.easeIn' });
       speech(this, VANITY_X - 170, 230, INTRO.thought3, 2200);
       PRODUCTS.forEach((p, i) => {
-        const icon = this.add.image(VANITY_X, 232, p.icon).setScale(0.2).setDepth(6);
+        const k = iconScale(this, p.icon);
+        const icon = this.add.image(VANITY_X, 232, p.icon).setScale(0.2 * k).setDepth(6);
         const angle = (i / PRODUCTS.length) * Math.PI * 2;
         this.tweens.add({
           targets: icon,
           x: VANITY_X + Math.cos(angle) * 420,
           y: 232 + Math.sin(angle) * 260,
-          scale: 0.9,
+          scale: 0.9 * k,
           angle: 360,
           duration: 1800,
           delay: 400 + i * 90,

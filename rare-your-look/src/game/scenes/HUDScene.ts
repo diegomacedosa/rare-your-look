@@ -13,6 +13,7 @@ import { touch, isTouchDevice } from '../systems/Controls';
 import { formatTime } from '../systems/ScoreSystem';
 import { iconButton, panel } from '../ui/Button';
 import type { LevelScene } from './LevelScene';
+import { iconScale } from '../art/textures';
 
 interface TouchButton {
   key: keyof typeof touch;
@@ -72,7 +73,7 @@ export class HUDScene extends Phaser.Scene {
     this.add.text(88, 22, 'RARE BAG', labelText(11, COLORS.mauve)).setLetterSpacing(3);
     const bag = Inventory.levelBag(this.levelId);
     bag.forEach((slot, i) => {
-      const dot = this.add.image(100 + i * 40, 58, slot.product.icon).setScale(0.42);
+      const dot = this.add.image(100 + i * 40, 58, slot.product.icon).setScale(0.42 * iconScale(this, slot.product.icon));
       this.bagDots.push(dot);
     });
     this.bagText = this.add.text(100 + bag.length * 40 - 4, 58, '', displayText(22, COLORS.ink)).setOrigin(0, 0.5);
@@ -205,7 +206,8 @@ export class HUDScene extends Phaser.Scene {
 
     const c = this.add.container(GAME_WIDTH / 2, 330).setDepth(15).setAlpha(0).setScale(0.85);
     const bg = panel(this, 0, 0, 560, 170, { alpha: 0.97, stroke: event.secret ? 0xd6ae62 : HEX.rose });
-    const icon = this.add.image(-200, 0, event.texture).setScale(event.secret ? 1.5 : 1.3);
+    const k = iconScale(this, event.texture);
+    const icon = this.add.image(-200, 0, event.texture).setScale(event.secret ? 1.5 : 1.3 * k);
     c.add([
       bg,
       icon,
@@ -216,12 +218,12 @@ export class HUDScene extends Phaser.Scene {
     this.tweens.add({ targets: c, alpha: 1, scale: 1, duration: 260, ease: 'Back.easeOut' });
 
     // o ícone voa do mundo até a Rare Bag (SPEC §34)
-    const flyer = this.add.image(event.screenX, event.screenY, event.texture).setScale(0.8).setDepth(16);
+    const flyer = this.add.image(event.screenX, event.screenY, event.texture).setScale(0.8 * k).setDepth(16);
     this.tweens.add({
       targets: flyer,
       x: BAG.x,
       y: BAG.y,
-      scale: 0.35,
+      scale: 0.35 * k,
       duration: 900,
       delay: 250,
       ease: 'Cubic.easeIn',

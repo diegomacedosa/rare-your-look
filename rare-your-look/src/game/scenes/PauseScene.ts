@@ -11,6 +11,7 @@ import { dim, soundToggles } from '../ui/helpers';
 import progress from '../systems/ProgressSystem';
 import audio from '../systems/AudioSystem';
 import type { LevelScene } from './LevelScene';
+import { iconScale } from '../art/textures';
 
 export class PauseScene extends Phaser.Scene {
   private levelKey = '';
@@ -50,7 +51,7 @@ export class PauseScene extends Phaser.Scene {
       const card = this.add.graphics();
       card.fillStyle(has ? HEX.blush : 0xf3eeec, 1);
       card.fillRoundedRect(x - 46, 160, 92, 132, 16);
-      const icon = this.add.image(x, 212, product.icon).setScale(0.85);
+      const icon = this.add.image(x, 212, product.icon).setScale(0.85 * iconScale(this, product.icon));
       if (!has) icon.setTint(0xb8a9a3).setAlpha(0.45);
       this.add.text(x, 262, has ? product.label : '?', labelText(12, has ? COLORS.mauve : COLORS.muted)).setOrigin(0.5).setLetterSpacing(1);
       this.add.text(x, 280, `Fase ${product.stage}`, bodyText(11, COLORS.muted)).setOrigin(0.5);

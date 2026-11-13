@@ -9,6 +9,7 @@ import { Button } from '../ui/Button';
 import { brandBackdrop, brandMark, fadeIn, goTo } from '../ui/helpers';
 import { Portrait } from '../avatar/portrait';
 import progress from '../systems/ProgressSystem';
+import { iconScale } from '../art/textures';
 
 export class CollectionScene extends Phaser.Scene {
   private from = 'MenuScene';
@@ -42,7 +43,7 @@ export class CollectionScene extends Phaser.Scene {
       const g = this.add.graphics();
       g.fillStyle(has ? HEX.white : 0xf3eeec, has ? 0.95 : 0.7);
       g.fillRoundedRect(x - 60, 172, 120, 150, 18);
-      const icon = this.add.image(x, 228, p.icon).setScale(0.9);
+      const icon = this.add.image(x, 228, p.icon).setScale(0.9 * iconScale(this, p.icon));
       if (!has) icon.setTint(0xb8a9a3).setAlpha(0.4);
       this.add.text(x, 282, has ? p.label.toUpperCase() : '???', labelText(12, has ? COLORS.ink : COLORS.muted)).setOrigin(0.5).setLetterSpacing(1);
       this.add.text(x, 302, has ? `${p.shades.length} tons` : `Fase ${p.stage}`, bodyText(11, COLORS.muted)).setOrigin(0.5);

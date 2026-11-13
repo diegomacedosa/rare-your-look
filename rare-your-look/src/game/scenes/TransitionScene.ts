@@ -12,6 +12,7 @@ import { speech } from '../ui/bubble';
 import { brandBackdrop, fadeIn, goTo, onConfirm } from '../ui/helpers';
 import progress from '../systems/ProgressSystem';
 import audio from '../systems/AudioSystem';
+import { iconScale } from '../art/textures';
 
 export class TransitionScene extends Phaser.Scene {
   private from = 1;
@@ -51,7 +52,7 @@ export class TransitionScene extends Phaser.Scene {
         targets: icon,
         x,
         y: 420,
-        scale: 0.95,
+        scale: 0.95 * iconScale(this, p.icon),
         duration: 520,
         delay: 1000 + i * 160,
         ease: 'Back.easeOut',

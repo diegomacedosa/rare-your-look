@@ -11,6 +11,7 @@ import { speech } from '../ui/bubble';
 import { fadeIn, goTo, onConfirm, spotlight } from '../ui/helpers';
 import progress from '../systems/ProgressSystem';
 import audio from '../systems/AudioSystem';
+import { iconScale } from '../art/textures';
 
 const FLOOR = 562;
 const VANITY_X = 820;
@@ -85,7 +86,7 @@ export class OutroScene extends Phaser.Scene {
         targets: icon,
         x,
         y: TABLE_Y - 24,
-        scale: 0.55,
+        scale: 0.55 * iconScale(this, p.icon),
         duration: 480,
         delay: 5400 + i * 130,
         ease: 'Back.easeOut',

@@ -9,6 +9,7 @@ import { getLevel } from '../../data/levels';
 import progress from '../systems/ProgressSystem';
 import audio from '../systems/AudioSystem';
 import { isTouchDevice } from '../systems/Controls';
+import { iconScale } from '../art/textures';
 
 export class MenuScene extends Phaser.Scene {
   constructor() {
@@ -83,7 +84,7 @@ export class MenuScene extends Phaser.Scene {
       const angle = (i / 6) * Math.PI * 2 - Math.PI / 2;
       const px = x + Math.cos(angle) * 170;
       const py = 330 + Math.sin(angle) * 150;
-      const icon = this.add.image(px, py, product.icon).setScale(0.9).setAngle(Phaser.Math.Between(-12, 12));
+      const icon = this.add.image(px, py, product.icon).setScale(0.9 * iconScale(this, product.icon)).setAngle(Phaser.Math.Between(-12, 12));
       this.tweens.add({ targets: icon, y: py - 12, duration: 1400 + i * 120, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     });
     const box = this.add.image(x + 150, 520, 'rarebox').setScale(1.1);
