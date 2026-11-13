@@ -42,7 +42,8 @@ export class MenuScene extends Phaser.Scene {
       new Button(this, cx, y, 'JOGAR', () => this.newGame(), { width: 320 });
     }
     y += 70;
-    new Button(this, cx, y, 'MINHA COLEÇÃO', () => goTo(this, 'CollectionScene', { from: 'MenuScene' }), { width: 320, variant: 'ghost' });
+    new Button(this, cx - 82, y, 'COLEÇÃO', () => goTo(this, 'CollectionScene', { from: 'MenuScene' }), { width: 156, fontSize: 15, variant: 'ghost' });
+    new Button(this, cx + 82, y, 'RANKING', () => goTo(this, 'RankingScene', { from: 'MenuScene' }), { width: 156, fontSize: 15, variant: 'ghost' });
 
     soundToggles(this, cx, GAME_HEIGHT - 60);
 
@@ -91,10 +92,10 @@ export class MenuScene extends Phaser.Scene {
     this.tweens.add({ targets: box, y: 510, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
   }
 
+  /** Novo jogo passa pela tela do nome (ranking); ela inicia a partida. */
   private newGame(): void {
     audio.unlock();
-    progress.newGame();
-    goTo(this, 'IntroScene');
+    goTo(this, 'NameScene');
   }
 
   private continueGame(): void {

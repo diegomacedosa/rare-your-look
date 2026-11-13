@@ -48,6 +48,30 @@ body {
   outline: none;
 }
 
+/* -------------------------------------------- campo do nome (NameScene) */
+.name-field {
+  position: fixed;
+  z-index: 5;
+  box-sizing: border-box;
+  padding: 0 0.8em;
+  border: 2px solid var(--color-rose-mauve);
+  border-radius: 14px;
+  background: #fff;
+  color: #1a1a1a;
+  font-family: var(--font-body);
+  font-weight: 500;
+  text-align: center;
+  outline: none;
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: manipulation;
+}
+
+.name-field:focus {
+  border-color: var(--color-deep-mauve);
+  box-shadow: 0 0 0 4px rgba(196, 146, 154, 0.3);
+}
+
 /* -------------------------------------------------- aviso de orientação */
 .rotate-hint {
   position: fixed;

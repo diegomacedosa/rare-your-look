@@ -16,9 +16,11 @@ import Inventory from '../systems/InventorySystem';
 import audio from '../systems/AudioSystem';
 import { formatTime } from '../systems/ScoreSystem';
 import { iconScale } from '../art/textures';
+import ranking, { type RankingData } from '../systems/RankingSystem';
 
 export class RevealScene extends Phaser.Scene {
   private portrait!: Portrait;
+  private rankingData: RankingData | null = null;
 
   constructor() {
     super('RevealScene');
@@ -100,6 +102,8 @@ export class RevealScene extends Phaser.Scene {
       this.add.text(x, 538, label.toUpperCase(), labelText(10, COLORS.blush)).setOrigin(0.5).setLetterSpacing(1);
     });
 
+    this.sendToRanking(cx, exploration);
+
     new Button(this, cx - 170, 610, 'JOGAR NOVAMENTE', () => this.playAgain(), { width: 300 });
     new Button(this, cx + 170, 610, 'VER MINHA COLEÇÃO', () => goTo(this, 'CollectionScene', { from: 'RevealScene' }), { width: 300, variant: 'light' });
     const save = new Button(this, cx - 170, 672, 'SALVAR IMAGEM DO LOOK', () => void this.saveImage(save), { width: 300, height: 44, fontSize: 13, variant: 'light' });
@@ -119,9 +123,38 @@ export class RevealScene extends Phaser.Scene {
     button.setEnabled(true);
   }
 
+  /**
+   * Envia o resultado para o ranking (uma vez por partida) e mostra a posição
+   * no tempo total. Clicar na linha abre o ranking completo.
+   */
+  private sendToRanking(cx: number, exploration: number): void {
+    const line = this.add.text(cx, 468, '', labelText(12, COLORS.blush)).setOrigin(0.5).setLetterSpacing(1);
+    const runId = progress.state.startedAt;
+    if (!ranking.name) {
+      line.setText('Você jogou sem ranking · ver classificações →');
+    } else if (ranking.wasSent(runId)) {
+      line.setText(`${ranking.name}, seu resultado já está no ranking · ver classificações →`);
+    } else {
+      line.setText('Enviando seu resultado para o ranking…');
+      const palettes = Object.values(progress.state.palettes).reduce((sum, list) => sum + list.length, 0);
+      void ranking
+        .submit(runId, { timeSec: progress.totalTime(), score: progress.state.score, palettes, exploration })
+        .then((data) => {
+          if (!line.active) return;
+          this.rankingData = data;
+          const pos = data?.me.time;
+          const where = data?.mode === 'online' ? 'ranking online' : 'ranking deste navegador';
+          line.setText(pos ? `${ranking.name}, você está em #${pos} no menor tempo (${where}) · ver ranking →` : 'Resultado salvo · ver ranking →');
+        });
+    }
+    line.setInteractive({ useHandCursor: true }).on('pointerup', () => {
+      audio.play('ui_select');
+      goTo(this, 'RankingScene', { from: 'RevealScene', preload: this.rankingData ?? undefined });
+    });
+  }
+
   private playAgain(): void {
-    progress.newGame();
-    goTo(this, 'IntroScene');
+    goTo(this, 'NameScene');
   }
 }
 

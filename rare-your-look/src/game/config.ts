@@ -17,6 +17,8 @@ import { OutroScene } from './scenes/OutroScene';
 import { DressingRoomScene } from './scenes/DressingRoomScene';
 import { RevealScene } from './scenes/RevealScene';
 import { CollectionScene } from './scenes/CollectionScene';
+import { NameScene } from './scenes/NameScene';
+import { RankingScene } from './scenes/RankingScene';
 
 export const GRAVITY = 1900;
 
@@ -57,6 +59,8 @@ export function createGameConfig(parent: string): Phaser.Types.Core.GameConfig {
       DressingRoomScene,
       RevealScene,
       CollectionScene,
+      NameScene,
+      RankingScene,
     ],
   };
 }
